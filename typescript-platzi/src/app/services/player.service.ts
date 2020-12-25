@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { Observable } from 'rxjs';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { Player } from '../interfaces/player';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,12 +16,12 @@ export class PlayerService {
     );
   }
 
-  getPlayers() {
+  getPlayers(): Observable<Player[]> {
     return this.playersDb.snapshotChanges().pipe(
       map((changes) => {
         return changes.map((c) => ({
-          $key: c.key,
-          ...c.payload.val(),
+          $key: c.key!,
+          ...c.payload.val()!,
         }));
       })
     );
@@ -35,16 +35,16 @@ export class PlayerService {
     this.db.list('/players').remove(id);
   }
 
-  editPlayer(newPlayerData: Player) {
+  /*editPlayer(newPlayerData: Player) {
     const $key = newPlayerData.$key;
     delete newPlayerData.$key;
     this.db.list('/players').update($key, newPlayerData);
-  }
+  }*/
 
-  editPlayer2(newPlayerData: Player) {
+  editPlayer(newPlayerData: Player) {
     const $key = newPlayerData.$key;
     if ($key) {
-      this.deletePlayer($key);
+      delete newPlayerData.$key;
       this.db.list('/players').update($key, newPlayerData);
     }
   }

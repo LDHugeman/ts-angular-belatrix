@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { take } from 'rxjs/operators';
 import { Country } from 'src/app/enums/country';
 import { SquadNumber } from 'src/app/enums/squad-number';
@@ -14,13 +15,17 @@ import { TeamService } from 'src/app/services/team.service';
 })
 export class PlayerDialogComponent implements OnInit {
   private team;
+  player: Player;
   public countries = Object.keys(Country).map((key) => ({
     label: key,
     key: Country[key],
   }));
-  public squadNumber = Object.keys(SquadNumber).slice(
-    Object.keys(SquadNumber).length / 2
-  );
+  public squadNumber = Object.keys(SquadNumber)
+    .slice(Object.keys(SquadNumber).length / 2)
+    .map((key) => ({
+      label: key,
+      key: SquadNumber[key],
+    }));
   constructor(
     private playerService: PlayerService,
     private teamService: TeamService
@@ -51,5 +56,17 @@ export class PlayerDialogComponent implements OnInit {
       ],
     };
     this.teamService.editTeam(formattedTeam);
+  }
+
+  onSubmit(playerForm: NgForm) {
+    const playerFormValue = {
+      ...playerForm.value,
+    };
+    if (playerForm.valid) {
+      playerFormValue.leftFooted =
+        playerFormValue.leftFooted === '' ? false : playerFormValue.leftFooted;
+    }
+    this.newPlayer(playerFormValue);
+    window.location.replace('#');
   }
 }

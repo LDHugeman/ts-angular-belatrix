@@ -11,11 +11,18 @@ import { TeamService } from './services/team.service';
 import { TeamTableComponent } from './components/team-table/team-table.component';
 import { PlayerTableComponent } from './components/player-table/player-table.component';
 import { PlayerDialogComponent } from './components/player-dialog/player-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, TeamTableComponent, PlayerTableComponent, PlayerDialogComponent],
+  declarations: [
+    AppComponent,
+    TeamTableComponent,
+    PlayerTableComponent,
+    PlayerDialogComponent,
+  ],
   imports: [
     BrowserModule,
+    FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AppRoutingModule,
